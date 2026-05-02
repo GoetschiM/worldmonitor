@@ -75,6 +75,47 @@ See the **[self-hosting guide](https://www.worldmonitor.app/docs/getting-started
 
 ---
 
+## Self-Hosting Troubleshooting (Pro, Login, API Keys, Webcams)
+
+If you run WorldMonitor locally (for example on `localhost:3030`), the app itself works without login, but some panels can still show `Pro`, `No data available`, or similar placeholders.
+
+### Why Login/Sign-in appears to do little locally
+
+- The public repository is designed to run in **community/self-host mode** by default.
+- Some `Pro` features are tied to hosted infrastructure, paid quotas, or backend credentials that are **not shipped** in this repo.
+- Because of that, local Login/Sign-in actions may not unlock hosted-tier capabilities.
+
+### Where API keys usually belong
+
+- Frontend Vite vars: `.env.local` (`VITE_*` variables).
+- Edge/API secrets: deployment platform env vars (for example Vercel/Railway project settings).
+- Never commit secrets to git.
+
+### Why many feeds can be empty
+
+- Upstream providers may rate-limit/geo-block/self-host block requests.
+- Missing optional provider keys can disable certain endpoints.
+- Some data sources are intentionally best-effort and degrade gracefully.
+
+### Webcams: can I add my own?
+
+Yes. The project can be extended with additional webcam/data sources, but this is a code/config contribution (not only a UI toggle). Typical path:
+
+1. Add source configuration in shared/config files.
+2. Add or extend an API/domain endpoint.
+3. Wire hydration so bootstrap loads the new source.
+4. Add/adjust panel mapping in `src/config` and component rendering.
+
+### Is local customization risky for public repos?
+
+- Safe approach: keep secrets in local env only, and use `.gitignore`d files.
+- Prefer feature flags for experimental/custom sources.
+- Don’t commit private API URLs, tokens, or paid provider credentials.
+
+If you want, create an issue or PR with a concrete webcam provider and expected schema, and we can help you wire it in cleanly.
+
+---
+
 ## Tech Stack
 
 | Category | Technologies |
